@@ -1,6 +1,12 @@
 {{- if or (.Values.lvmd.managed) (.Values.node.lvmdEmbedded) }}
   {{ $global := . }}
-  {{- $lvmds := concat ( list .Values.lvmd ) .Values.lvmd.additionalConfigs }}
+  {{- $lvmds := list }}
+  {{- if .Values.lvmd.deviceClasses }}
+  {{- $lvmds = concat $lvmds ( list .Values.lvmd ) }}
+  {{- end }}
+  {{- if .Values.lvmd.additionalConfigs }}
+  {{- $lvmds = concat $lvmds .Values.lvmd.additionalConfigs }}
+  {{- end }}
   {{- range $lvmdidx, $lvmd := $lvmds }}
     {{/* Undo the "." rewritten by the range block */}}
     {{- with $global }}
